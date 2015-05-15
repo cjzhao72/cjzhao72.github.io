@@ -40,9 +40,10 @@
 		  for (float j=0.;j<20.;j+=2.){
 		  float bound3= -1.+0.1*j, bound4=-1.+0.1*(j+2.);
 		  if (y>=bound3&&y<bound4){
-	//	  if (x==uCursor.x&&y==uCursor.y)
-	//	  color=vec3(0.,0.,0.);
-		   color=vec3((1.-0.05*i)*sin(uTime), (1.-0.05*j)*cos(uTime), 0.05*min(i,j)*(sin(uTime)));
+		  if (uCursor.x>=bound1&&uCursor.x<bound2&&uCursor.y>=bound3&&uCursor.y<bound4)
+		  color=vec3(1.,0.5,1.);
+		   else color=vec3((1.-0.05*i)*sin(uTime), (1.-0.05*j)*cos(uTime), 0.05*min(i,j)*(sin(uTime)));
+		   
 		   }
 		 }
 		} 
