@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			body {
+				background-color: #ffffff;
+				margin: 0;
+			//	overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<script src=three.js></script>
+		
+		<script>
+
+		
+			
+			var camera, scene, renderer;
+			var earthGeometry, earthMaterial, earthMesh, moonGeometry, moonMaterial, moonMesh, cloudMesh, skyMesh, joint;
+
+			function setup() {
+
+				var W = window.innerWidth, H = window.innerHeight;
+				camera = new THREE.PerspectiveCamera( 50, W/H, 1, 10000 );
+				camera.position.z = 300;
+
+				scene = new THREE.Scene();
+				scene.add(camera);
+				
+				earthGeometry   = new THREE.SphereGeometry(30, 32, 32)
+                earthMaterial  = new THREE.MeshPhongMaterial();
+			    earthMaterial.map    = THREE.ImageUtils.loadTexture('images/earthmap1k.jpg')
+				earthMaterial.bumpMap    = THREE.ImageUtils.loadTexture('images/earthbump1k.jpg')
+                earthMaterial.bumpScale = 0.05
+				earthMaterial.specularMap    = THREE.ImageUtils.loadTexture('images/earthspec1k.jpg')
+                earthMaterial.specular  = new THREE.Color('grey')
+				 earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
+                  
+				
+				 moonGeometry   = new THREE.SphereGeometry(5, 32, 32)
+                 moonMaterial  = new THREE.MeshPhongMaterial()
+                 moonMesh = new THREE.Mesh(moonGeometry, moonMaterial)
+				moonMaterial.map    = THREE.ImageUtils.loadTexture('images/moonmap4k.jpg')
+				
+				 cloudMesh = new THREE.Mesh(
+                                    new THREE.SphereGeometry(30.2, 32, 32),
+                                    new THREE.MeshPhongMaterial({
+                                     map: THREE.ImageUtils.loadTexture('images/fair_clouds_8k.jpg'),
+                                     transparent: true
+                                     })
+               );
+			   
+			    skyMesh = new THREE.Mesh(
+                                  new THREE.SphereGeometry(400, 32, 32), 
+                                  new THREE.MeshBasicMaterial({
+                                  map: THREE.ImageUtils.loadTexture('images/galaxy_starfield.png'), 
+                                  side: THREE.BackSide
+                                  })
+               );
+			   scene.add(earthMesh);
+			   scene.add(skyMesh);
+			   earthMesh.add(cloudMesh);
+				joint = new THREE.Mesh();
+				earthMesh.add(joint);
+				joint.add(moonMesh);
+				renderer = new THREE.WebGLRenderer({ alpha: true });
+				renderer.setSize( W, H );
+				document.body.appendChild( renderer.domElement );
+
+
+			}
+
+			function draw() {
+
+				requestAnimationFrame( draw );
+				render();
+				
+
+			}
+			
+			function render(){
+			
+                earthMesh.rotation.y += 0.05;
+                cloudMesh.rotation.y += 0.05;
+                moonMesh.position.set(20, 0, 0);
+                moonMesh.rotation.y += 0.05;
+                renderer.render( scene, camera );
+            }
+
+			setup();
+			draw();
+
+		</script>
+		
+	</body>
+</html>
