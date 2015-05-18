@@ -10,7 +10,7 @@
 			}
 		</style>
 	</head>
-	<body>
+	<body background = "images/galaxy_starfield.png">
 		
 		<script src=three.js></script>
 		
@@ -18,77 +18,67 @@
 
 		
 			
-			var camera, scene, renderer;
-			var earthGeometry, earthMaterial, earthMesh, moonGeometry, moonMaterial, moonMesh, cloudMesh, skyMesh, joint;
+			var camera, scene, renderer, earth, cloud, light, moon, joint;
 
 			function setup() {
-
-				var W = window.innerWidth, H = window.innerHeight;
-				camera = new THREE.PerspectiveCamera( 50, W/H, 1, 10000 );
-				camera.position.z = 300;
-
-				scene = new THREE.Scene();
-				scene.add(camera);
+			
+                    scene = new THREE.Scene();
+                    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 1000);
+                    camera.position.z = 1.5;
+                    renderer = new THREE.WebGLRenderer({ alpha: true });
+                    renderer.setSize( window.innerWidth, window.innerHeight );
+                    document.body.appendChild( renderer.domElement );
+ 
+				    scene.add(new THREE.AmbientLight(0x333333));
+                    light = new THREE.DirectionalLight(0xffffff, 0.45);
+                    light.position.set(10,3,5);
+                    scene.add(light);
+				    earth= new THREE.Mesh(
+                                       new THREE.SphereGeometry(0.5, 32, 32),
+                                       new THREE.MeshPhongMaterial({
+                                                   map: THREE.ImageUtils.loadTexture('images/earthmap1k.jpg'),
+                                                   bumpMap: THREE.ImageUtils.loadTexture('images/earthbump1k.jpg'),
+                                                   bumpScale:   0.005,
+                                                   specularMap: THREE.ImageUtils.loadTexture('images/earthspec1k.jpg'),
+                                                   specular: new THREE.Color('grey')      
+                   }));
+		
 				
-				earthGeometry   = new THREE.SphereGeometry(30, 32, 32)
-                earthMaterial  = new THREE.MeshPhongMaterial();
-			    earthMaterial.map    = THREE.ImageUtils.loadTexture('images/earthmap1k.jpg')
-				earthMaterial.bumpMap    = THREE.ImageUtils.loadTexture('images/earthbump1k.jpg')
-                earthMaterial.bumpScale = 0.05
-				earthMaterial.specularMap    = THREE.ImageUtils.loadTexture('images/earthspec1k.jpg')
-                earthMaterial.specular  = new THREE.Color('grey')
-				 earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
-                  
-				
-				 moonGeometry   = new THREE.SphereGeometry(5, 32, 32)
-                 moonMaterial  = new THREE.MeshPhongMaterial()
-                 moonMesh = new THREE.Mesh(moonGeometry, moonMaterial)
-				moonMaterial.map    = THREE.ImageUtils.loadTexture('images/moonmap4k.jpg')
-				
-				 cloudMesh = new THREE.Mesh(
-                                    new THREE.SphereGeometry(30.2, 32, 32),
+				    cloud = new THREE.Mesh(
+                                    new THREE.SphereGeometry(0.53, 32, 32),
                                     new THREE.MeshPhongMaterial({
-                                     map: THREE.ImageUtils.loadTexture('images/fair_clouds_8k.jpg'),
-                                     transparent: true
-                                     })
-               );
-			   
-			    skyMesh = new THREE.Mesh(
-                                  new THREE.SphereGeometry(400, 32, 32), 
-                                  new THREE.MeshBasicMaterial({
-                                  map: THREE.ImageUtils.loadTexture('images/galaxy_starfield.png'), 
-                                  side: THREE.BackSide
-                                  })
-               );
-			   scene.add(earthMesh);
-			   scene.add(skyMesh);
-			   earthMesh.add(cloudMesh);
-				joint = new THREE.Mesh();
-				earthMesh.add(joint);
-				joint.add(moonMesh);
-				renderer = new THREE.WebGLRenderer({ alpha: true });
-				renderer.setSize( W, H );
-				document.body.appendChild( renderer.domElement );
+                                    map: THREE.ImageUtils.loadTexture('images/fair_clouds_4k.png'),
+                                    transparent: true
+                   }));	
+
+                     scene.add(earth);
+                     scene.add(cloud);
 
 
-			}
+                    moon = new THREE.Mesh(
+				                     new THREE.SphereGeometry(0.1, 32, 32), 
+				                     new THREE.MeshPhongMaterial({	
+                                     map: THREE.ImageUtils.loadTexture( 'images/moonmap4k.jpg' ),
+                                     bumpMap: THREE.ImageUtils.loadTexture('images/moonbump1k.jpg'),
+                                     bumpScale:   0.005,				  
+			       }) )	;	
+	                joint = new THREE.Mesh();
+                    earth.add(joint);
+                    joint.add(moon);	
+					
+		}
 
 			function draw() {
 
 				requestAnimationFrame( draw );
-				render();
+				earth.rotation.y += 0.01;
+                cloud.rotation.y += 0.01;
+                moon.position.set(2, 0, 0);
+                moon.rotation.y += 0.05;
+                renderer.render( scene, camera );
 				
 
 			}
-			
-			function render(){
-			
-                earthMesh.rotation.y += 0.05;
-                cloudMesh.rotation.y += 0.05;
-                moonMesh.position.set(20, 0, 0);
-                moonMesh.rotation.y += 0.05;
-                renderer.render( scene, camera );
-            }
 
 			setup();
 			draw();
