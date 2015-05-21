@@ -1,0 +1,86 @@
+<table>
+<tr>
+<td><canvas id=canvas1 width=500 height=500></td>
+<td width=50></td>
+<td valign=center>
+
+rotateZ
+
+</td>
+</tr>
+
+<tr>
+<td><canvas id=canvas2 width=500 height=500></td>
+<td width=50></td>
+<td valign=top>
+translation
+</td>
+</tr>
+</table>
+
+
+<script src=drawlib1.js></script>
+<script src="matrix3.js"></script>
+<script>
+   var canvas = initCanvas('canvas1');
+   canvas.update = function(g) {
+      g.fillStyle = this.cursor.z ? 'red' : 'rgb(255,255,128)';
+      g.beginPath();
+	  var matrix = new Matrix();
+	  var transformMatrix = matrix.rotateZ(time*50);
+	  var x = 200;
+      var y = 200;
+	  var newPoint = apply(transformMatrix, [100, 100, 0, 1]);
+      g.moveTo(x+ newPoint[0], y + newPoint[1]);
+      newPoint = apply (transformMatrix, [100, -100, 0, 1]);
+      g.lineTo(x+ newPoint[0], y + newPoint[1]);
+      newPoint = apply(transformMatrix, [-100, -100, 0, 1]);
+      g.lineTo(x+ newPoint[0], y + newPoint[1]);
+      newPoint = apply(transformMatrix, [-100, 100, 0, 1]);
+      g.lineTo(x+ newPoint[0], y + newPoint[1]);
+      g.fill();
+
+      g.strokeStyle = 'blue';
+      g.beginPath();
+      g.moveTo(0,0);
+      g.lineTo(this.width,0);
+      g.lineTo(this.width,this.height);
+      g.lineTo(0,this.height);
+      g.lineTo(0,0);
+      g.stroke();
+	  
+	  
+   }
+
+   var canvas = initCanvas('canvas2');
+   canvas.update = function(g) {
+      g.strokeStyle = 'blue';
+      g.beginPath();
+      g.moveTo(0,0);
+      g.lineTo(this.width,0);
+      g.lineTo(this.width,this.height);
+      g.lineTo(0,this.height);
+      g.lineTo(0,0);
+      g.stroke();
+	  
+	  g.fillStyle = this.cursor.z ? 'red' : 'rgb(255,255,128)';
+      g.beginPath();
+	 
+      var matrix = new Matrix();
+      var transformMatrix = matrix.translate(100*Math.sin(time));
+
+	  var x = 100;
+      var y = 100;
+	  var newPoint = apply(transformMatrix, [100, 100, 0, 1]);
+      g.moveTo(x+ newPoint[0], y + newPoint[1]);
+      newPoint = apply (transformMatrix, [100, -100, 0, 1]);
+      g.lineTo(x+ newPoint[0], y + newPoint[1]);
+      newPoint = apply(transformMatrix, [-100, -100, 0, 1]);
+      g.lineTo(x+ newPoint[0], y + newPoint[1]);
+      newPoint = apply(transformMatrix, [-100, 100, 0, 1]);
+      g.lineTo(x+ newPoint[0], y + newPoint[1]);
+      g.fill();
+
+      
+   }
+</script>
