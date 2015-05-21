@@ -1,0 +1,74 @@
+<table>
+<tr>
+<td><canvas id=canvas1 width=800 height=800></td>
+<td width=50></td>
+<td valign=center>
+Animate Hermite Curve in 0.1s-1
+<p> P0 (200, 200);
+P1 (500, 300); 
+R0 (300, 600);
+R1 (700, 300);
+
+</td>
+</tr>
+
+
+
+<script src=drawlib1.js></script>
+<script src="matrix3.js"></script>
+<script>
+   var canvas = initCanvas('canvas1');
+   var startTime = (new Date()).getTime();
+   var hermiteArray = []; 
+   canvas.update = function(g) {
+	  var t = ((new Date()).getTime() - startTime)/10000;
+	  var P0 = [100, 100]; 
+      var P1 = [500, 300]; 
+	  var R0 = [300, 600];
+	  var R1 = [700, 300];
+	  g.beginPath(); 
+	  g.fillStyle = 'rgb(255,255,128)';
+	  g.arc(P0[0], P0[1], 5, 0, 2*Math.PI); 
+	  g.arc(P1[0], P1[1], 5, 0, 2*Math.PI);  
+	  g.fill();
+	  
+	  function calc (t, a, b, c, d) { 
+        var x = (2*a - 2*b + c +d) * Math.pow(t, 3) + (3*b - 3*a -2*c -d) * Math.pow(t, 2) + c*t + a ;
+        return x; 
+      }
+     var hermitePoint = [calc (t, P0[0], P1[0], R0[0], R1[0]), calc (t, P0[1], P1[1], R0[1], R1[1])];	 
+	 hermiteArray.push(hermitePoint);
+     
+	function draw() {
+		  if (t <= 1) {
+		  g.strokeStyle = 'red';
+		  g.beginPath();
+		  g.moveTo(P0[0], P0[1]);
+		  for (var i = 1; i < hermiteArray.length; i ++) {
+		    point = hermiteArray[i];
+			g.lineTo(point[0], point[1]);
+		  
+		  }
+		  g.stroke();
+		  }
+		  else {
+			startTime = (new Date()).getTime();
+			hermiteArray = [];
+		  }
+
+	}
+     
+      g.strokeStyle = 'blue';
+      g.beginPath();
+      g.moveTo(0,0);
+      g.lineTo(this.width,0);
+      g.lineTo(this.width,this.height);
+      g.lineTo(0,this.height);
+      g.lineTo(0,0);
+      g.stroke();
+	  draw();
+	  
+   }
+
+
+</script>

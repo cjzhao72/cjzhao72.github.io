@@ -1,0 +1,97 @@
+<table>
+<tr>
+<td><canvas id=canvas1 width=800 height=800></td>
+<td width=50></td>
+<td valign=center>
+Animate Bezier Curve in 0.1s-1 
+<p> A (100, 100);
+B (50, 700); 
+C (600, 500);
+D (500, 300);
+
+</td>
+</tr>
+
+
+
+<script src=drawlib1.js></script>
+<script src="matrix3.js"></script>
+<script>
+   var canvas = initCanvas('canvas1');
+   var startTime = (new Date()).getTime();
+   var bezierArray = [];
+   canvas.update = function(g) {
+	  var t = ((new Date()).getTime() - startTime)/10000;
+	  var A = [100, 100];
+	  var B = [50, 700];
+	  var C = [600, 500];
+	  var D = [500, 300];
+	  lineWidth = 10;
+	  g.beginPath(); 
+	  g.beginPath();
+	  g.strokeStyle = 'black';
+	  g.moveTo(A[0], A[1]);
+	  g.lineTo(B[0], B[1]);
+	  g.lineTo(C[0], C[1]);
+	  g.lineTo(D[0], D[1]);
+	  g.stroke();
+	 
+	var innerP = [(1-t)*A[0] + t*B[0], (1-	t)*A[1]+t*B[1]]; 
+	var innerQ = [(1-t)*B[0] + t*C[0], (1-t)*B[1]+t*C[1]]; 
+    var innerR = [(1-t)*C[0] + t*D[0],  (1-t)*C[1] + t*D[1]];
+	 
+	var innerS = [(1-t)*innerP[0]+t*innerQ[0], (1-t)*innerP[1]+t*innerQ[1]];
+	var innerT = [(1-t)*innerQ[0]+t*innerR[0], (1-t)*innerQ[1]+t*innerR[1]];
+	var bezierP = [(1-t)*innerS[0]+t*innerT[0], (1-t)*innerS[1]+t*innerT[1]];
+	bezierArray.push(bezierP);
+	 
+	 function drawLine () {
+		if (t <= 1) {
+		  g.strokeStyle = 'blue';
+		  g.moveTo(innerP[0], innerP[1]);
+		  g.lineTo(innerQ[0], innerQ[1]);
+		  g.lineTo(innerR[0], innerR[1]);
+		  g.stroke();
+		  g.strokeStyle = 'rgb(255,204,229)';
+		  g.moveTo(innerS[0],innerS[1]);
+		  g.lineTo(innerT[0], innerT[1]);
+		  g.stroke();
+		}
+		else
+		  startTime = (new Date()).getTime();
+	
+    }     
+	function drawCurve() {
+		  if (t <= 1) {
+		  g.strokeStyle = 'red';
+		  g.beginPath();
+		  g.moveTo(A[0], A[1]);
+		  for (var i = 1; i < bezierArray.length; i ++) {
+		    point = bezierArray[i];
+			g.lineTo(point[0], point[1]);
+		  
+		  }
+		  g.stroke();
+		  }
+		  else {
+			startTime = (new Date()).getTime();
+			bezierArray = [];
+		  }
+
+	}
+     
+      g.strokeStyle = 'blue';
+      g.beginPath();
+      g.moveTo(0,0);
+      g.lineTo(this.width,0);
+      g.lineTo(this.width,this.height);
+      g.lineTo(0,this.height);
+      g.lineTo(0,0);
+      g.stroke();
+	  drawCurve();
+	  drawLine();
+	  
+   }
+
+
+</script>
