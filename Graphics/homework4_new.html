@@ -106,10 +106,9 @@
    vec3 shadeSphere(vec3 point, vec3 W) {
       vec3 color, normal, R;
 	  normal = (point-sphere.xyz)/sphere.w;
-	  vec3 eyeDirection = normalize(-1.0 * W);
 	  R = 2.*dot(normal, -Ldir)*normal + Ldir;
 	  color = turbulence(point, ambient);
-	  color += Lrgb * ( diffuse* max(0., dot(normal, Ldir)) + specular* pow(max(0., dot(eyeDirection, R)), 15.)); 
+	  color += Lrgb * ( diffuse* max(0., dot(normal, Ldir)) + specular* pow(max(0., dot(-W, R)), 15.)); 
 
       // YOU NEED TO COMPUTE COLOR FOR A DIFFUSELY SHADED SPHERE.
             
