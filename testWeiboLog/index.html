@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+    <meta charset="UTF-8">
+    <meta property="wb:webmaster" content="e14f2c739eec2a7d" />
+
+    <!--
+    This is to add wb.js for official.
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=YOUR APPKEY" type="text/javascript" charset="utf-8"></script>
+    -->
+
+    <!-- this is to add wb.js for test-->
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=YOUR APPKEY&debug=true" type="text/javascript" charset="utf-8"></script>
+
+    <script>
+
+        WB2.anyWhere(function(W){
+            W.parseCMD("/users/show.json", function(sResult, bStatus){
+                try{
+                    //to do something...
+                }catch(e){}
+            },{
+                uid: '123456789'
+            }{
+                method: 'get'
+            });
+        });
+    </script>
+
+    <title>NYUMahjong_at_Weibo</title>
+</head>
+<body>
+This is Mahjong at Weibo.
+<br/>
+
+<!-- This is the pay attention button
+<wb:follow-button uid="2991975565" type="red_1" width="67" height="24" ></wb:follow-button></body>
+-->
+
+<!--
+<wb:share-button addition="number" type="button"></wb:share-button>
+-->
+
+<!-- This is the like button
+<wb:like></wb:like>
+-->
+
+
+<!-- This is the publish button
+<wb:publish action="pubilish" type="web" language="zh_cn" button_type="red" button_size="middle" refer="y" ></wb:publish>
+-->
+
+
+<!-- This is the review box button
+<wb:comments url="http://open.weibo.com/widget/comments.php" width="auto" ></wb:comments>
+-->
+
+<!--This is the Weibo login button-->
+<wb:login-button type="3,2" onlogin="login" onlogout="logout">登录按钮</wb:login-button>
+
+
+<!--
+<br/>
+<wb:share-button type="button" size="middle"> </wb:share-button>
+-->
+
+<!--
+<iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=5964190675&verifier=34e78d94&dpc=1"></iframe>
+-->
+
+
+<br/>
+
+</html>

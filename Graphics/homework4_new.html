@@ -25,7 +25,7 @@
    vec3 ambient = vec3(0.3, 0.3, 0.4);
    vec3 diffuse = vec3(0.2, 0.2, 0.2);
    vec3 specular = vec3(0.1, 0.1, 0.1);
-   
+ 
    
 
    vec3 Lrgb = vec3(1.0, 0., 0.0);
@@ -93,7 +93,7 @@
             f *= 2.0;
         }
         t = 0.4*(t+1.8);
-        float s = pow(0.5 + 0.5 * cos(7.0 * point.x + 10.0 * t+0.5*uTime), 0.1);
+        float s = pow(0.5 + 0.5 * cos(7.0 * point.x + 6.0 * t+0.8*uTime), 0.1);
         return vec3(s * color.r, s * s * color.g, s * s * s * color.b);
     }
 
@@ -107,8 +107,8 @@
       vec3 color, normal, R;
 	  normal = (point-sphere.xyz)/sphere.w;
 	  R = 2.*dot(normal, -Ldir)*normal + Ldir;
-	  color = turbulence(point, ambient);
-	  color += Lrgb * ( diffuse* max(0., dot(normal, Ldir)) + specular* pow(max(0., dot(-W, R)), 15.)); 
+	  color = turbulence(point, ambient)+ Lrgb * ( diffuse* max(0., dot(normal, Ldir)) + specular* pow(max(0., dot(-W, R)), 15.)); 
+	
 
       // YOU NEED TO COMPUTE COLOR FOR A DIFFUSELY SHADED SPHERE.
             
@@ -118,7 +118,7 @@
    void main(void) {
       vec2 c = uCursor.xy;
       Ldir = normalize(vec3(c.x, c.y, 1. - 2. * dot(c, c)));
-	  sphere = vec4(0.5*sin(uTime),0.5*cos(uTime),-3.,.64);
+	  sphere = vec4(0.4*sin(uTime),0.4*cos(uTime),-3.,.64);
 
       // YOU NEED TO COMPUTE V AND W TO CREATE THE RAY FOR THIS PIXEL,
       // USING vPosition.x AND vPosition.y.
